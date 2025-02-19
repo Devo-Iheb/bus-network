@@ -4,7 +4,8 @@ import org.springframework.web.socket.handler.TextWebSocketHandler;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.TextMessage;
 
-
+import org.springframework.web.socket.config.annotation.WebSocketConfigurer;
+import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry;
 
 import java.io.IOException;
 import java.util.concurrent.CopyOnWriteArrayList;
