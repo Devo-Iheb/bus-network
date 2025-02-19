@@ -1,0 +1,12 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name:  bus-network-service
+spec:
+  selector:
+    app:  bus-network
+  type:  LoadBalancer 
+  ports:
+  - protocol: TCP
+    port:  80
+    targetPort:  8080

@@ -1,0 +1,31 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name:  bus-network-deployment
+  labels:
+    name:  bus-network
+spec:
+  template:
+    metadata:
+      labels:
+        name: bus-network
+    spec:
+      containers:
+      - image:  bus-network:latest
+        name:  bus-network
+        resources:
+          requests:
+            cpu: "20m"
+            memory: "55M"
+        env:
+        - name:  SPRING_DATASOURCE_URL
+          value: "jdbc:h2:~/busnetwork"  
+        - name: SPRING_DATASOURCE_USERNAME
+          value: "root"
+        - name:  "SPRING_DATASOURCE_PASSWORD"
+          value: "root"
+        ports:
+        - containerPort:  8080
+          name:  bus-network
+      restartPolicy: Always
+      imagePullPolicy: Always
