@@ -15,6 +15,11 @@ public class BusWebSocketHandler extends TextWebSocketHandler {
     private static final CopyOnWriteArrayList<WebSocketSession> sessions = new CopyOnWriteArrayList<>();
 
     @Override
+    public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
+        registry.addHandler(busWebSocketHandler(), "/bus-tracker").setAllowedOrigins("*");
+}
+
+    @Override
     public void afterConnectionEstablished(WebSocketSession session) {
         sessions.add(session);
     }
