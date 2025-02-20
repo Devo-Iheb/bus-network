@@ -5,9 +5,10 @@ import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 import java.io.IOException;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.List;
 
-public class BusWebSocketHandler extends TextWebSocketHandler { // Hérite bien de TextWebSocketHandler
-    private static final CopyOnWriteArrayList<WebSocketSession> sessions = new CopyOnWriteArrayList<>();
+public class BusWebSocketHandler extends TextWebSocketHandler {
+    private static final List<WebSocketSession> sessions = new CopyOnWriteArrayList<>();
 
     @Override
     public void afterConnectionEstablished(WebSocketSession session) {
@@ -15,16 +16,15 @@ public class BusWebSocketHandler extends TextWebSocketHandler { // Hérite bien 
     }
 
     @Override
-    protected void handleTextMessage(WebSocketSession session, TextMessage message) throws IOException {
-        for (WebSocketSession s : sessions) {
-            if (s.isOpen()) {
-                s.sendMessage(message);
-            }
-        }
-    }
-
-    @Override
     public void afterConnectionClosed(WebSocketSession session, org.springframework.web.socket.CloseStatus status) {
         sessions.remove(session);
+    }
+
+    public void broadcastBusUpdate(String message) throws IOException {
+        for (WebSocketSession session : sessions) {
+            if (session.isOpen()) {
+                session.sendMessage(new TextMessage(message));
+            }
+        }
     }
 }

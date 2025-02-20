@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Bus Tracker 🚌</title>
+    
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; }
+        #map { height: 500px; width: 80%; margin: auto; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.3); }
+    </style>
+</head>
+<body>
+
+    <h2>📡 Suivi en Temps Réel des Bus</h2>
+    <div id="map"></div>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+    <script>
+        var map = L.map('map').setView([48.8566, 2.3522], 12); 
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
+
+        var buses = {};
+
+        const ws = new WebSocket("ws://localhost:8080/bus-tracker");
+
+        ws.onopen = () => console.log("✅ Connexion WebSocket établie !");
+        ws.onmessage = (event) => {
+            const data = JSON.parse(event.data);
+            console.log("📥 Mise à jour reçue :", data);
+
+            if (buses[data.id]) {
+                buses[data.id].setLatLng([data.latitude, data.longitude]);
+            } else {
+                buses[data.id] = L.marker([data.latitude, data.longitude])
+                    .addTo(map)
+                    .bindPopup(`🚌 Bus ${data.id} - Route: ${data.route}`);
+            }
+        };
+
+        ws.onerror = (error) => console.error("❌ Erreur WebSocket :", error);
+        ws.onclose = () => console.log("🔌 WebSocket fermé !");
+    </script>
+
+</body>
+</html>
