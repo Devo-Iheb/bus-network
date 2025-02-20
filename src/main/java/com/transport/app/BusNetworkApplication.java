@@ -6,10 +6,12 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.web.socket.config.annotation.EnableWebSocket;
 import org.springframework.web.socket.config.annotation.WebSocketConfigurer;
 import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry;
+import org.springframework.context.annotation.ComponentScan;
 
 import com.transport.app.websocket.BusWebSocketHandler;
 
 @SpringBootApplication
+@ComponentScan(basePackages = "com.transport.app")
 @EnableWebSocket
 public class BusNetworkApplication implements WebSocketConfigurer {
 
