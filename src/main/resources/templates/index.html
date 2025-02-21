@@ -30,7 +30,7 @@
 
         var buses = {};
 
-        const ws = new WebSocket("ws://localhost:8080/bus-tracker");
+        const ws = new WebSocket("ws://192.168.33.13:8080/bus-tracker");
 
         ws.onopen = () => console.log("✅ Connexion WebSocket établie !");
         ws.onmessage = (event) => {
